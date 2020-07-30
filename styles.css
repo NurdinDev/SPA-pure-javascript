@@ -13,8 +13,12 @@ body {
 #app {
 	width: auto;
 	height: calc(100vh - 30vh);
-	padding-left: calc(var(--menu-width) + 3rem);
 	padding-top: 30vh;
+	transition: padding .2s linear;
+}
+
+#app.menu-active {
+	padding-left: calc(var(--menu-width) + 3rem);
 }
 
 #menu {
@@ -142,6 +146,7 @@ body {
 	background-color: gray;
 }
 
+.row .card.active,
 .row .card:hover {
 	transform: scale(1.09);
 	opacity: 1;

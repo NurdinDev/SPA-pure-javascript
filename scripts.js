@@ -1,9 +1,16 @@
 const app = document.getElementById("app");
 let menuActive = true;
+
 const hash = window.location.hash;
 let activePage = hash ? hash.replace(/^#/, "") : "home";
+
 const menu = document.getElementById("menu");
-const pageLoaded = false;
+
+let selectedCard = 0;
+let selectedRow = 0;
+let hPress = 0;
+let vPress = 0;
+let rows;
 
 const pages = {
   home: "home",
@@ -89,41 +96,121 @@ function BuildMenu() {
     return newArr;
   }
 }
+function clearActiveCard() {
+  rows.forEach((row) => {
+    const cards = row.querySelectorAll(".card");
+    cards.forEach((card) => card.classList.remove("active"));
+  });
+}
+function cardMove(move) {
+  let row;
+  let cards;
+  switch (move) {
+    case "right":
+      if (!selectedCard) {
+        hPress = 0;
+      } else {
+        hPress++;
+      }
+      row = rows[vPress];
+      cards = row.querySelectorAll(".card");
+      if (hPress == cards.length - 1) {
+        selectedCard = cards[cards.length - 1];
+        return;
+      }
+      clearActiveCard();
+      selectedCard = cards[hPress];
+      selectedCard.classList.add("active");
+      break;
+    case "left":
+      hPress--;
+      row = rows[vPress];
+      cards = row.querySelectorAll(".card");
+      clearActiveCard();
+      selectedCard = cards[hPress];
+      selectedCard.classList.add("active");
+      break;
+    case "down":
+      if (vPress == rows.length - 1) {
+        selectedRow = rows[rows.length - 1];
+        return;
+      }
+      vPress++;
+      row = rows[vPress];
+      cards = row.querySelectorAll(".card");
+      clearActiveCard();
+      selectedCard = cards[hPress];
+      selectedCard.classList.add("active");
+      break;
+    case "up":
+      if (vPress == 0) {
+        selectedRow = 0;
+        return;
+      }
+      vPress--;
+      row = rows[vPress];
+      cards = row.querySelectorAll(".card");
+      clearActiveCard();
+      selectedCard = cards[hPress];
+      selectedCard.classList.add("active");
+      break;
+    default:
+      break;
+  }
+}
 
 function showMenu() {
   menuActive = true;
   menu.classList.remove("hidden");
+  app.classList.add("menu-active");
 }
 function hideMenu() {
   menuActive = false;
   menu.classList.add("hidden");
+  app.classList.remove("menu-active");
 }
 function moveLeft() {
-  showMenu();
+  if (!menuActive && !hPress) {
+    showMenu();
+  } else if (!menuActive) {
+    cardMove("left");
+  }
 }
 function moveUp() {
-  const pagesKeys = Object.keys(pages);
-  const activeIndex = pagesKeys.indexOf(activePage);
-  const previousPage =
-    activeIndex == 0
-      ? pagesKeys[pagesKeys.length - 1]
-      : pagesKeys[activeIndex - 1];
-  activePage = previousPage;
-  BuildMenu(previousPage);
+  if (menuActive) {
+    const pagesKeys = Object.keys(pages);
+    const activeIndex = pagesKeys.indexOf(activePage);
+    const previousPage =
+      activeIndex == 0
+        ? pagesKeys[pagesKeys.length - 1]
+        : pagesKeys[activeIndex - 1];
+    activePage = previousPage;
+    BuildMenu(previousPage);
+  } else {
+    cardMove("up");
+  }
 }
 function moveRight() {
-  console.log("move right");
-  hideMenu();
+  if (menuActive) {
+    hideMenu();
+  } else {
+    // move between cards
+    cardMove("right");
+  }
 }
 function moveDown() {
-  const pagesKeys = Object.keys(pages);
-  const activeIndex = pagesKeys.indexOf(activePage);
-  const nextPage =
-    activeIndex == pagesKeys.length - 1
-      ? pagesKeys[0]
-      : pagesKeys[activeIndex + 1];
-  activePage = nextPage;
-  BuildMenu(nextPage);
+  if (menuActive) {
+    const pagesKeys = Object.keys(pages);
+    const activeIndex = pagesKeys.indexOf(activePage);
+    const nextPage =
+      activeIndex == pagesKeys.length - 1
+        ? pagesKeys[0]
+        : pagesKeys[activeIndex + 1];
+    activePage = nextPage;
+    BuildMenu(nextPage);
+  } else {
+    cardMove("down");
+  }
 }
 
 function getKeyAndMove(key) {
@@ -146,8 +233,19 @@ function getKeyAndMove(key) {
   }
 }
 
-function renderPage(page) {
+function resetProps() {
+  selectedCard = 0;
+  selectedRow = 0;
+  hPress = 0;
+  vPress = 0;
+  rows;
   window.scrollTo(0, 0);
+  setTimeout(() => {
+    rows = document.querySelectorAll(".page .row");
+  }, 1000);
+}
+
+function renderPage(page) {
   switch (page) {
     case "home":
       Home();
@@ -166,13 +264,16 @@ function renderPage(page) {
   }
 }
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("document loaded");
   const page = location.hash.replace(/^#/, "");
   renderPage(page);
   BuildMenu(activePage);
+  setTimeout(() => {
+    rows = document.querySelectorAll(".page .row");
+  }, 1000);
 });
 
 window.addEventListener("hashchange", function () {
   const page = location.hash.replace(/^#/, "");
+  resetProps();
   renderPage(page);
 });
