@@ -1,3 +1,7 @@
+:root {
+	--menu-width: 250px;
+}
+
 * {
 	margin: 0;
 }
@@ -6,15 +10,23 @@ body {
 	background-color: #111;
 }
 
+#app {
+	width: auto;
+	height: calc(100vh - 30vh);
+	padding-left: calc(var(--menu-width) + 3rem);
+	padding-top: 30vh;
+}
 
 #menu {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	bottom: 0;
-	height: 100%;
-	width: 20vw;
-	background-color: #80808026;
+	height: 100vh;
+	width: var(--menu-width);
+	background-color: #808080a3;
 	display: flex;
+	z-index: 2;
+	transform: transform .45s;
 }
 
 #menu.hidden {
@@ -44,7 +56,7 @@ body {
 	color: white;
 	font-size: 2rem;
 	text-decoration: none;
-	font-size: 28px;
+	text-transform: capitalize;
 }
 
 #menu ul .item:first-child {
@@ -52,18 +64,11 @@ body {
 	padding-bottom: 2.5rem;
 }
 
-#menu ul .item:first-child a {
-	font-size: 26px;
-}
-
 #menu ul .item:last-child {
 	opacity: .6;
 	padding-bottom: 2.5rem;
 }
 
-#menu ul .item:last-child a {
-	font-size: 26px;
-}
 
 #menu ul .item.active {
 	background-color: gray;
@@ -77,6 +82,107 @@ body {
 	height: 36px;
 }
 
-#menu ul .item.active a {
-	font-size: 30px;
+
+#home:before {
+	background-image: url("https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.ytimg.com%2Fvi%2FcQYvQIrM1FY%2Fmaxresdefault.jpg&f=1&nofb=1");
+	background-repeat: no-repeat;
+}
+
+#page1:before {
+	background-image: url("https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.ytimg.com%2Fvi%2FseLpG9E4boI%2Fmaxresdefault.jpg&f=1&nofb=1");
+	background-repeat: no-repeat;
+}
+
+#page2:before {
+	background-image: url("https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fg.foolcdn.com%2Feditorial%2Fimages%2F480066%2Fnetflix-dark.jpg&f=1&nofb=1");
+	background-repeat: no-repeat;
+}
+
+#page3:before {
+	background-image: url("https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fart-s.nflximg.net%2F61e47%2F3aae550639732c55925ef057657f26da45861e47.jpg&f=1&nofb=1");
+	background-repeat: no-repeat;
+}
+
+.page {
+	transition-property: all;
+	transition-duration: .5s;
+	transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
+.cover:before {
+	content: "";
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: auto;
+	height: 50vh;
+	opacity: 0.5;
+	background-position: center;
+	background-size: cover;
+	z-index: -1;
+}
+
+
+.row {
+	display: flex;
+	flex-wrap: nowrap;
+	overflow-y: hidden;
+	overflow-x: scroll;
+	padding: 20px;
+	scrollbar-width: none;
+}
+
+.row .card {
+	height: 250px;
+	width: 100%;
+	margin-right: 10px;
+	transform: transform .45s;
+	flex: 0 0 10em;
+	background-color: gray;
+}
+
+.row .card:hover {
+	transform: scale(1.09);
+	opacity: 1;
+}
+
+
+
+/* If the screen size is 601px wide or more, set the font-size of <div> to 80px */
+@media screen and (min-width: 601px) {
+	#menu ul .item:last-child a {
+		font-size: 24px;
+	}
+
+	#menu ul .item:last-child a {
+		font-size: 24px;
+	}
+
+	#menu ul .item a {
+		font-size: 26px;
+	}
+
+	#menu ul .item.active a {
+		font-size: 32px;
+	}
+}
+
+/* If the screen size is 600px wide or less, set the font-size of <div> to 30px */
+@media screen and (max-width: 600px) {
+	#menu ul .item:last-child a {
+		font-size: 16px;
+	}
+
+	#menu ul .item:last-child a {
+		font-size: 16px;
+	}
+
+	#menu ul .item a {
+		font-size: 20px;
+	}
+
+	#menu ul .item.active a {
+		font-size: 24px;
+	}
 }

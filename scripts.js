@@ -1,13 +1,15 @@
 const app = document.getElementById("app");
 let menuActive = true;
-let activePage = "home";
+const hash = window.location.hash;
+let activePage = hash ? hash.replace(/^#/, "") : "home";
 const menu = document.getElementById("menu");
+const pageLoaded = false;
 
 const pages = {
   home: "home",
-  menu1: "menu1",
-  menu2: "menu2",
-  menu3: "menu3",
+  page1: "page1",
+  page2: "page2",
+  page3: "page3",
 };
 
 function appendPage(page) {
@@ -20,6 +22,15 @@ function appendPage(page) {
 
 function Home() {
   appendPage(pages.home);
+}
+function Page1() {
+  appendPage(pages.page1);
+}
+function Page2() {
+  appendPage(pages.page2);
+}
+function Page3() {
+  appendPage(pages.page3);
 }
 
 function BuildMenu() {
@@ -54,6 +65,7 @@ function BuildMenu() {
     ul.appendChild(li);
     li.appendChild(a);
     a.innerHTML = page;
+    a.click();
 
     // add empty LI for space
     const spacerLI = document.createElement("li");
@@ -121,23 +133,46 @@ function getKeyAndMove(key) {
       moveLeft();
       break;
     case 38: //Up arrow key
+      key.preventDefault();
       moveUp();
       break;
     case 39: //right arrow key
       moveRight();
       break;
     case 40: //down arrow key
+      key.preventDefault();
       moveDown();
       break;
   }
 }
 
+function renderPage(page) {
+  window.scrollTo(0, 0);
+  switch (page) {
+    case "home":
+      Home();
+      break;
+    case "page1":
+      Page1();
+      break;
+    case "page2":
+      Page2();
+      break;
+    case "page3":
+      Page3();
+      break;
+    default:
+      Home();
+  }
+}
 document.addEventListener("DOMContentLoaded", function () {
   console.log("document loaded");
+  const page = location.hash.replace(/^#/, "");
+  renderPage(page);
   BuildMenu(activePage);
-  Home();
 });
 
-// window.addEventListener("hashchange", function () {
-//   console.log(location.has);
-// });
+window.addEventListener("hashchange", function () {
+  const page = location.hash.replace(/^#/, "");
+  renderPage(page);
+});
