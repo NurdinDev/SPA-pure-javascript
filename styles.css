@@ -152,6 +152,37 @@ body {
 	opacity: 1;
 }
 
+.single_page {
+	display: none;
+	width: 512px;
+	height: 512px;
+	background-color: gray;
+	position: fixed;
+	z-index: 2;
+	left: 0;
+	top: 0;
+	overflow: auto;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+}
+
+.single_page.show {
+	display: block;
+}
+
+.single_page .modal-content {
+	padding: 20px;
+	color: white;
+}
+
+.single_page .close {
+	color: white;
+	font-size: large;
+	margin: 1rem;
+	display: block;
+	cursor: pointer;
+}
 
 
 @media screen and (min-width: 601px) {

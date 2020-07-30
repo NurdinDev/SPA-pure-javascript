@@ -213,7 +213,29 @@ function moveDown() {
   }
 }
 
+function hideSingleModal() {
+  const elem = document.querySelector(".single_page");
+  elem.classList.remove("show");
+}
+
+function showSingleModal() {
+  const elem = document.querySelector(".single_page");
+  elem.classList.add("show");
+}
+
+function pressEnter() {
+  document.querySelector(".card.active").click();
+}
+
+function pressEscape() {
+  hideSingleModal();
+}
+
 function getKeyAndMove(key) {
+  if (key.key === "Escape") {
+    pressEscape();
+    return;
+  }
   const key_code = key.which || key.keyCode;
   switch (key_code) {
     case 37: //left arrow key
@@ -230,6 +252,9 @@ function getKeyAndMove(key) {
       key.preventDefault();
       moveDown();
       break;
+    case 13:
+      key.preventDefault();
+      pressEnter();
   }
 }
 
@@ -263,13 +288,25 @@ function renderPage(page) {
       Home();
   }
 }
+
 document.addEventListener("DOMContentLoaded", function () {
   const page = location.hash.replace(/^#/, "");
   renderPage(page);
   BuildMenu(activePage);
   setTimeout(() => {
     rows = document.querySelectorAll(".page .row");
+    document.querySelectorAll(".card").forEach((card) => {
+      card.addEventListener("click", () => {
+        showSingleModal();
+      });
+    });
   }, 1000);
+
+  document
+    .querySelector(".single_page .close")
+    .addEventListener("click", () => {
+      hideSingleModal();
+    });
 });
 
 window.addEventListener("hashchange", function () {
