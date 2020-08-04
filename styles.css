@@ -137,6 +137,10 @@ body {
 	scrollbar-width: none;
 }
 
+.row::-webkit-scrollbar {
+	display: none;
+}
+
 .row .card {
 	height: 250px;
 	width: 100%;
